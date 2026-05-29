@@ -66,7 +66,9 @@ class Event extends Model
 
     public function scopeApplyType($query, $type)
     {
-        if ($type && $type !== 'all' && $type !== 'variable') {
+        // Wie im alten Frontend: sowohl 'fix' als auch 'variable' filtern nach
+        // dem Typ; nur 'all' (oder leer) liefert alle Typen.
+        if ($type === 'fix' || $type === 'variable') {
             return $query->where('type', $type);
         }
         return $query;
