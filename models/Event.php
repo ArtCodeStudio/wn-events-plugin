@@ -28,12 +28,13 @@ class Event extends Model
         'calendar_id', 'title', 'subtitle', 'slug', 'description', 'type',
         'starts_at', 'ends_at', 'show_times', 'offer', 'location', 'equipment',
         'note', 'pricetext', 'prices', 'notifications', 'is_active',
-        'sort_order', 'firestore_id',
+        'sort_order', 'firestore_id', 'show_price',
     ];
 
     protected $casts = [
         'show_times' => 'boolean',
         'is_active'  => 'boolean',
+        'show_price' => 'boolean',
     ];
 
     /**
@@ -226,6 +227,7 @@ class Event extends Model
             'showTimes'     => (bool) $this->show_times,
             'prices'        => $this->prices ?: [],
             'pricetext'     => $this->pricetext,
+            'showPrice'     => (bool) $this->show_price,
             'notifications' => $this->notifications ?: [],
             'images'        => $images,
             'offer'         => $this->offer,

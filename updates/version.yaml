@@ -3,3 +3,6 @@
     - create_calendars_table.php
     - create_events_table.php
     - create_bookings_table.php
+1.0.1:
+    - "Expliziter Preis-anzeigen-Schalter pro Event."
+    - add_show_price_to_events.php

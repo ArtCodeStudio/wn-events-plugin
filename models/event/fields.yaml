@@ -93,6 +93,12 @@ tabs:
             size: small
 
         # ---------------- Tab: Preise ----------------
+        show_price:
+            label: Preis im Frontend anzeigen
+            tab: Preise
+            type: switch
+            default: true
+            comment: 'Aus = es wird kein Preis angezeigt (z. B. „Preis auf Anfrage"-Touren).'
         pricetext:
             label: Preis-Überschreibungstext (optional)
             tab: Preise
