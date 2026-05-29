@@ -1,0 +1,24 @@
+subject = "Neue Buchungsanfrage: {{ booking.event_title }}"
+==
+
+**Neue Buchungsanfrage** über die Webseite.
+
+- **Führung:** {{ booking.event_title }}
+{% if booking.calendar %}- **Kalender:** {{ booking.calendar }}{% endif %}
+{% if booking.event_date %}- **Termin:** {{ booking.event_date|date('d.m.Y H:i') }}{% endif %}
+- **Personen:** {{ booking.quantity }}
+{% if booking.total is not null %}- **Gesamtsumme:** {{ booking.total|number_format(2, ',', '.') }} €{% endif %}
+
+**Kontakt**
+
+- **Name:** {{ booking.firstname }} {{ booking.lastname }}
+- **E-Mail:** {{ booking.email }}
+{% if booking.phone %}- **Telefon:** {{ booking.phone }}{% endif %}
+{% if booking.street %}- **Straße:** {{ booking.street }}{% endif %}
+{% if booking.zip %}- **PLZ:** {{ booking.zip }}{% endif %}
+{% if booking.message %}
+
+**Nachricht:**
+
+{{ booking.message }}
+{% endif %}

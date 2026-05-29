@@ -25,9 +25,9 @@ class Plugin extends PluginBase
 
     public function registerComponents()
     {
-        return [
-            \JumpLink\Events\Components\EventApi::class => 'eventApi',
-        ];
+        // Das Frontend nutzt die JSON-API aus routes.php (rivets/XHR-getrieben),
+        // daher werden derzeit keine CMS-Komponenten benötigt.
+        return [];
     }
 
     public function registerNavigation()

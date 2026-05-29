@@ -1,0 +1,15 @@
+subject = "Ihre Buchungsanfrage: {{ booking.event_title }}"
+==
+
+Hallo {{ booking.firstname }} {{ booking.lastname }},
+
+vielen Dank für Ihre Buchungsanfrage. Wir haben folgende Angaben erhalten:
+
+- **Führung:** {{ booking.event_title }}
+{% if booking.event_date %}- **Termin:** {{ booking.event_date|date('d.m.Y H:i') }}{% endif %}
+- **Personen:** {{ booking.quantity }}
+{% if booking.total is not null %}- **Gesamtsumme:** {{ booking.total|number_format(2, ',', '.') }} €{% endif %}
+
+Wir melden uns in Kürze bei Ihnen, um die Buchung zu bestätigen.
+
+Herzliche Grüße
