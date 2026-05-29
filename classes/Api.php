@@ -49,6 +49,27 @@ class Api
      */
     public function events(\Illuminate\Http\Request $request)
     {
+        // Detail-Lookup (einzelnes Event) – ignoriert Zeit-/Aktiv-Filter
+        $id     = $request->get('id');
+        $handle = $request->get('handle');
+        $title  = $request->get('title');
+
+        if ($id || $handle || $title) {
+            $query = Event::with(['calendar', 'images']);
+            if ($id) {
+                $query->where('id', $id);
+            }
+            if ($handle) {
+                $query->where('slug', $handle);
+            }
+            if ($title) {
+                $query->where('title', $title);
+            }
+            $data = $query->orderBy('starts_at', 'asc')->get()
+                ->map(fn ($e) => $e->toLegacyArray())->all();
+            return $this->json($request, $data);
+        }
+
         $type           = $request->get('type', 'all');
         $calendar       = $request->get('calendar', 'all');
         $excludeCal     = $request->get('excludeCalendar', 'none');
