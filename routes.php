@@ -16,6 +16,7 @@ Route::group([
 
     Route::get('calendars', [\JumpLink\Events\Classes\Api::class, 'calendars']);
     Route::get('events', [\JumpLink\Events\Classes\Api::class, 'events']);
-    Route::match(['post', 'options'], 'book', [\JumpLink\Events\Classes\Api::class, 'book']);
+    Route::match(['post', 'options'], 'book', [\JumpLink\Events\Classes\Api::class, 'book'])
+        ->middleware('throttle:20,1'); // max. 20 Buchungsanfragen pro Minute/IP
 
 });
