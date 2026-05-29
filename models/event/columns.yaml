@@ -1,0 +1,31 @@
+columns:
+    title:
+        label: Titel
+        type: text
+        searchable: true
+        sortable: true
+    calendar:
+        label: Kalender
+        relation: calendar
+        select: name
+        sortable: false
+    type:
+        label: Typ
+        type: text
+        sortable: true
+        searchable: false
+    starts_at:
+        label: Beginn
+        type: datetime
+        format: d.m.Y H:i
+        sortable: true
+    is_active:
+        label: Aktiv
+        type: switch
+        sortable: true
+    bookings_count:
+        label: Buchungen
+        relation: bookings
+        relationCount: true
+        type: number
+        sortable: false

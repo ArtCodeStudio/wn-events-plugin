@@ -1,0 +1,176 @@
+fields:
+    title:
+        label: Titel
+        type: text
+        span: left
+        required: true
+    slug:
+        label: URL-Handle
+        type: text
+        span: right
+        preset:
+            field: title
+            type: slug
+        comment: Wird automatisch aus dem Titel erzeugt.
+
+    subtitle:
+        label: Untertitel
+        type: text
+        span: left
+    is_active:
+        label: Aktiv (im Frontend sichtbar)
+        type: switch
+        span: right
+        default: true
+
+tabs:
+    fields:
+        # ---------------- Tab: Details ----------------
+        calendar:
+            label: Kalender
+            tab: Details
+            type: relation
+            nameFrom: name
+            emptyOption: '– kein Kalender –'
+            span: left
+        type:
+            label: Typ
+            tab: Details
+            type: dropdown
+            span: right
+            default: fix
+            options:
+                fix: 'Fixer Termin (öffentliche Führung)'
+                variable: 'Auf Anfrage (Termin frei wählbar)'
+            comment: '"Auf Anfrage" lässt den Besucher im Buchungsformular ein eigenes Datum wählen.'
+
+        starts_at:
+            label: Beginn
+            tab: Details
+            type: datepicker
+            mode: datetime
+            span: left
+        ends_at:
+            label: Ende
+            tab: Details
+            type: datepicker
+            mode: datetime
+            span: right
+        show_times:
+            label: Uhrzeiten im Frontend anzeigen
+            tab: Details
+            type: switch
+            default: true
+
+        offer:
+            label: Angebot / Zielgruppe
+            tab: Details
+            type: text
+            span: left
+            comment: 'z. B. "Familien mit Kindern ab 5 Jahren"'
+        location:
+            label: Treffpunkt
+            tab: Details
+            type: text
+            span: right
+            comment: 'Wird im Frontend zu einem Google-Maps-Link.'
+
+        description:
+            label: Beschreibung
+            tab: Details
+            type: richeditor
+            size: large
+
+        equipment:
+            label: Mitzubringende Ausrüstung
+            tab: Details
+            type: textarea
+            size: small
+        note:
+            label: Anmerkungen
+            tab: Details
+            type: richeditor
+            size: small
+
+        # ---------------- Tab: Preise ----------------
+        pricetext:
+            label: Preis-Überschreibungstext (optional)
+            tab: Preise
+            type: text
+            comment: 'Wenn gesetzt, wird dieser Text statt der berechneten Staffelpreise angezeigt.'
+        prices:
+            label: Staffelpreise
+            tab: Preise
+            type: repeater
+            prompt: Preisstufe hinzufügen
+            form:
+                fields:
+                    min:
+                        label: ab Personen
+                        type: number
+                        span: left
+                        default: 1
+                    max:
+                        label: bis Personen
+                        type: number
+                        span: right
+                        default: 1
+                    price:
+                        label: Preis pro Person (€)
+                        type: number
+                        span: left
+                        default: 0
+                    fixprice:
+                        label: Fixpreis / Grundpreis (€)
+                        type: number
+                        span: right
+                        default: 0
+                    unit:
+                        label: Einheit
+                        type: text
+                        span: left
+                        default: person
+                    eachAdditionalUnit:
+                        label: Personenpreis erst ab "ab Personen" berechnen
+                        type: checkbox
+                        span: right
+                        default: false
+
+        # ---------------- Tab: Bilder ----------------
+        images:
+            label: Bildergalerie
+            tab: Bilder
+            type: fileupload
+            mode: image
+            useCaption: true
+            imageWidth: 400
+            imageHeight: 300
+            thumbOptions:
+                mode: crop
+            comment: 'Per Drag & Drop sortierbar. Titel/Beschreibung je Bild über das Stift-Symbol.'
+
+        # ---------------- Tab: Benachrichtigungen ----------------
+        notifications:
+            label: Empfänger für Buchungsanfragen
+            tab: Benachrichtigungen
+            type: repeater
+            prompt: Empfänger hinzufügen
+            comment: 'Leer lassen, um den Standard-Empfänger aus den Plugin-Einstellungen zu verwenden.'
+            form:
+                fields:
+                    name:
+                        label: Name
+                        type: text
+                        span: left
+                    email:
+                        label: E-Mail
+                        type: text
+                        span: right
+
+        # ---------------- Tab: Buchungen ----------------
+        bookings:
+            label: Buchungen
+            tab: Buchungen
+            type: partial
+            path: $/jumplink/events/controllers/events/_bookings_relation.htm
+            context: [update, preview]

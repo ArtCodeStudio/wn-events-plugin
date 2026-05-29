@@ -1,0 +1,14 @@
+name: jumplink.events::lang.calendars.label
+form: $/jumplink/events/models/calendar/fields.yaml
+modelClass: JumpLink\Events\Models\Calendar
+defaultRedirect: jumplink/events/calendars
+
+create:
+    title: backend::lang.form.create_title
+    redirect: jumplink/events/calendars/update/:id
+    redirectClose: jumplink/events/calendars
+
+update:
+    title: backend::lang.form.update_title
+    redirect: jumplink/events/calendars
+    redirectClose: jumplink/events/calendars

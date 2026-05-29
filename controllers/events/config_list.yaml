@@ -1,0 +1,17 @@
+title: jumplink.events::lang.events.label_plural
+list: $/jumplink/events/models/event/columns.yaml
+modelClass: JumpLink\Events\Models\Event
+recordUrl: jumplink/events/events/update/:id
+noRecordsMessage: backend::lang.list.no_records
+showCheckboxes: true
+showSetup: true
+recordsPerPage: 25
+defaultSort:
+    column: starts_at
+    direction: desc
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: backend::lang.list.search_prompt
+        mode: all
+filter: config_filter.yaml

@@ -1,0 +1,5 @@
+<?php if ($this->formGetContext() === 'update'): ?>
+    <?= $this->relationRender('bookings') ?>
+<?php else: ?>
+    <p class="text-muted"><?= e(trans('backend::lang.form.preview_no_files_message')) ?: 'Buchungen erscheinen nach dem Speichern.' ?></p>
+<?php endif ?>

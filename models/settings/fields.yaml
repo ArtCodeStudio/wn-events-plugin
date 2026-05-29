@@ -1,0 +1,36 @@
+fields:
+    booking_enabled:
+        label: Buchungen aktiviert
+        type: switch
+        default: true
+        comment: 'Wenn deaktiviert, nimmt das Buchungsformular keine Anfragen an.'
+
+tabs:
+    fields:
+        notify_name:
+            label: Standard-Empfänger Name
+            tab: Benachrichtigung
+            type: text
+            span: left
+        notify_email:
+            label: Standard-Empfänger E-Mail
+            tab: Benachrichtigung
+            type: text
+            span: right
+            comment: 'Empfänger für Buchungsanfragen, wenn am Event keine Empfänger hinterlegt sind.'
+        send_customer_copy:
+            label: Bestätigungskopie an Bucher senden
+            tab: Benachrichtigung
+            type: switch
+            default: true
+        sender_name:
+            label: Absender-Name
+            tab: Absender
+            type: text
+            span: left
+        sender_email:
+            label: Absender-E-Mail
+            tab: Absender
+            type: text
+            span: right
+            comment: 'Leer lassen, um den globalen Mail-Absender zu verwenden.'

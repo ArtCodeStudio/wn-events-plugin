@@ -1,0 +1,16 @@
+title: jumplink.events::lang.calendars.label
+list: $/jumplink/events/models/calendar/columns.yaml
+modelClass: JumpLink\Events\Models\Calendar
+recordUrl: jumplink/events/calendars/update/:id
+noRecordsMessage: backend::lang.list.no_records
+showCheckboxes: true
+showSetup: true
+recordsPerPage: 25
+defaultSort:
+    column: sort_order
+    direction: asc
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: backend::lang.list.search_prompt
+        mode: all

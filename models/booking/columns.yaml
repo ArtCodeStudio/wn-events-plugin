@@ -1,0 +1,40 @@
+columns:
+    created_at:
+        label: Eingegangen
+        type: datetime
+        format: d.m.Y H:i
+        sortable: true
+    status:
+        label: Status
+        type: partial
+        path: $/jumplink/events/models/booking/_status_column.htm
+        sortable: true
+    event_title:
+        label: Führung
+        type: text
+        searchable: true
+        sortable: true
+    event_date:
+        label: Termin
+        type: datetime
+        format: d.m.Y H:i
+        sortable: true
+    firstname:
+        label: Vorname
+        type: text
+        searchable: true
+    lastname:
+        label: Nachname
+        type: text
+        searchable: true
+    email:
+        label: E-Mail
+        type: text
+        searchable: true
+    quantity:
+        label: Pers.
+        type: number
+    total:
+        label: Summe
+        type: number
+        format: "%.2f €"

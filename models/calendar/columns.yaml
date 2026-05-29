@@ -1,0 +1,25 @@
+columns:
+    name:
+        label: Name
+        type: text
+        searchable: true
+        sortable: true
+    title:
+        label: Titel
+        type: text
+        searchable: true
+    color:
+        label: Farbe
+        type: colorpicker
+    type:
+        label: Typ
+        type: text
+    is_active:
+        label: Aktiv
+        type: switch
+        sortable: true
+    events_count:
+        label: Events
+        relation: events
+        relationCount: true
+        type: number

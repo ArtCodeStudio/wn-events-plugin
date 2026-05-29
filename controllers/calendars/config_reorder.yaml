@@ -1,0 +1,5 @@
+title: Kalender sortieren
+modelClass: JumpLink\Events\Models\Calendar
+toolbar:
+    buttons: reorder_toolbar
+nameFrom: name

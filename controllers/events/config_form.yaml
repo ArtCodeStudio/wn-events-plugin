@@ -1,0 +1,17 @@
+name: jumplink.events::lang.events.label
+form: $/jumplink/events/models/event/fields.yaml
+modelClass: JumpLink\Events\Models\Event
+defaultRedirect: jumplink/events/events
+
+create:
+    title: backend::lang.form.create_title
+    redirect: jumplink/events/events/update/:id
+    redirectClose: jumplink/events/events
+
+update:
+    title: backend::lang.form.update_title
+    redirect: jumplink/events/events
+    redirectClose: jumplink/events/events
+
+preview:
+    title: backend::lang.form.preview_title

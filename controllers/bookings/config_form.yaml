@@ -1,0 +1,9 @@
+name: jumplink.events::lang.bookings.label
+form: $/jumplink/events/models/booking/fields.yaml
+modelClass: JumpLink\Events\Models\Booking
+defaultRedirect: jumplink/events/bookings
+
+update:
+    title: Buchung
+    redirect: jumplink/events/bookings
+    redirectClose: jumplink/events/bookings

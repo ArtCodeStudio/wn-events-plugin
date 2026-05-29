@@ -1,0 +1,5 @@
+1.0.0:
+    - "JumpLink Events – Erstinstallation: Kalender, Events und Buchungen."
+    - create_calendars_table.php
+    - create_events_table.php
+    - create_bookings_table.php

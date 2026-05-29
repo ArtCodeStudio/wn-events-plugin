@@ -1,0 +1,6 @@
+<?php
+    $labels = ['new' => 'Neu', 'confirmed' => 'Bestätigt', 'cancelled' => 'Storniert'];
+    $classes = ['new' => 'label-warning', 'confirmed' => 'label-success', 'cancelled' => 'label-default'];
+    $status = $record->status ?: 'new';
+?>
+<span class="label <?= $classes[$status] ?? 'label-default' ?>"><?= e($labels[$status] ?? $status) ?></span>

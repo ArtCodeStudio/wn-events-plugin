@@ -1,0 +1,82 @@
+fields:
+    status:
+        label: Status
+        type: dropdown
+        span: left
+        options:
+            new: 'Neu'
+            confirmed: 'Bestätigt'
+            cancelled: 'Storniert'
+    created_at:
+        label: Eingegangen am
+        type: datepicker
+        mode: datetime
+        span: right
+        disabled: true
+
+tabs:
+    fields:
+        event_title:
+            label: Führung
+            tab: Buchung
+            type: text
+            span: left
+            disabled: true
+        calendar:
+            label: Kalender
+            tab: Buchung
+            type: text
+            span: right
+            disabled: true
+        event_date:
+            label: Gebuchter Termin
+            tab: Buchung
+            type: datepicker
+            mode: datetime
+            span: left
+        quantity:
+            label: Anzahl Personen
+            tab: Buchung
+            type: number
+            span: right
+        total:
+            label: Gesamtsumme (€)
+            tab: Buchung
+            type: number
+            span: left
+
+        firstname:
+            label: Vorname
+            tab: Kontakt
+            type: text
+            span: left
+        lastname:
+            label: Nachname
+            tab: Kontakt
+            type: text
+            span: right
+        email:
+            label: E-Mail
+            tab: Kontakt
+            type: text
+            span: left
+        phone:
+            label: Telefon
+            tab: Kontakt
+            type: text
+            span: right
+        street:
+            label: Straße
+            tab: Kontakt
+            type: text
+            span: left
+        zip:
+            label: PLZ
+            tab: Kontakt
+            type: text
+            span: right
+        message:
+            label: Nachricht
+            tab: Kontakt
+            type: textarea
+            size: small

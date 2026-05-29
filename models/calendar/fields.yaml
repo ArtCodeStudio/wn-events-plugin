@@ -1,0 +1,65 @@
+fields:
+    name:
+        label: Name (Identifier)
+        type: text
+        span: left
+        required: true
+        comment: 'Kurzname, der die Events zuordnet – z. B. Watt, Land, Fluss, Spezial.'
+    is_active:
+        label: Aktiv
+        type: switch
+        span: right
+        default: true
+
+tabs:
+    fields:
+        title:
+            label: Titel
+            tab: Details
+            type: text
+            span: left
+        subtitle:
+            label: Untertitel
+            tab: Details
+            type: text
+            span: right
+        color:
+            label: Akzentfarbe
+            tab: Details
+            type: colorpicker
+            span: left
+            # explizit gesetzt, damit der Core-Fallback auf brand_settings.default_colors
+            # (das null sein kann) nicht greift
+            availableColors: ['#1abc9c','#16a085','#6cc551','#52a838','#b1dbef','#88c9e7','#2da7c7','#227f96','#b281c5','#7b4e8e','#103141','#081821','#f8e095','#dcb22d','#de8754','#d66829','#b33f32','#ab2a1c','#95a5a6','#7f8c8d']
+        css_class:
+            label: CSS-Klasse (optional)
+            tab: Details
+            type: text
+            span: right
+            comment: 'Optionale Bootstrap-State-Klasse für das Frontend (z. B. bg-state-warning).'
+        type:
+            label: Typ
+            tab: Details
+            type: text
+            span: left
+            default: events
+        description:
+            label: Beschreibung
+            tab: Details
+            type: richeditor
+            size: small
+        note:
+            label: Anmerkungen
+            tab: Details
+            type: richeditor
+            size: small
+        images:
+            label: Bilder
+            tab: Bilder
+            type: fileupload
+            mode: image
+            useCaption: true
+            imageWidth: 400
+            imageHeight: 300
+            thumbOptions:
+                mode: crop

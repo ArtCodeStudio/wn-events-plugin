@@ -1,0 +1,16 @@
+{
+    "name": "jumplink/wn-events-plugin",
+    "type": "winter-plugin",
+    "description": "Events / Führungen: Kalender, Staffelpreise, Bildergalerien und Buchungen – lokale Ablösung der Firebase-Lösung.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "JumpLink – Art+Code Studio",
+            "email": "pascal@artandcode.studio",
+            "homepage": "https://artandcode.studio"
+        }
+    ],
+    "require": {
+        "composer/installers": "~1.0"
+    }
+}

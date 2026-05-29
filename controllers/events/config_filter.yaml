@@ -1,0 +1,22 @@
+scopes:
+    is_active:
+        label: Aktiv
+        type: switch
+        conditions: is_active <> true AND is_active <> false:is_active = true
+    type:
+        label: Typ
+        type: group
+        options:
+            fix: 'Fixer Termin'
+            variable: 'Auf Anfrage'
+        conditions: type in (:filtered)
+    calendar:
+        label: Kalender
+        type: group
+        nameFrom: name
+        modelClass: JumpLink\Events\Models\Calendar
+        conditions: calendar_id in (:filtered)
+    starts_at:
+        label: Zeitraum
+        type: daterange
+        conditions: starts_at >= ':after' AND starts_at <= ':before'

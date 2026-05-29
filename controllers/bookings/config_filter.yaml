@@ -1,0 +1,13 @@
+scopes:
+    status:
+        label: Status
+        type: group
+        options:
+            new: 'Neu'
+            confirmed: 'Bestätigt'
+            cancelled: 'Storniert'
+        conditions: status in (:filtered)
+    created_at:
+        label: Eingegangen
+        type: daterange
+        conditions: created_at >= ':after' AND created_at <= ':before'

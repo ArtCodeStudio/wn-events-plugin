@@ -1,0 +1,7 @@
+bookings:
+    label: jumplink.events::lang.bookings.label
+    view:
+        list: $/jumplink/events/models/booking/columns.yaml
+        recordUrl: jumplink/events/bookings/update/:id
+        showCheckboxes: false
+        recordsPerPage: 20

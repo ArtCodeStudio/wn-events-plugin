@@ -1,0 +1,17 @@
+title: jumplink.events::lang.bookings.menu_label
+list: $/jumplink/events/models/booking/columns.yaml
+modelClass: JumpLink\Events\Models\Booking
+recordUrl: jumplink/events/bookings/update/:id
+noRecordsMessage: backend::lang.list.no_records
+showCheckboxes: true
+showSetup: true
+recordsPerPage: 50
+defaultSort:
+    column: created_at
+    direction: desc
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: backend::lang.list.search_prompt
+        mode: all
+filter: config_filter.yaml
