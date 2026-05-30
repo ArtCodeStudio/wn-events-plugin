@@ -155,6 +155,23 @@ class EventList extends ComponentBase
         return $this->propBool('showImages');
     }
 
+    /**
+     * Event-ID, für die soeben serverseitig erfolgreich gebucht wurde
+     * (Query-Flag jl_booked nach dem Redirect aus Api::bookForm). 0 = keine.
+     */
+    public function bookedId()
+    {
+        return (int) input('jl_booked', 0);
+    }
+
+    /**
+     * Event-ID, deren serverseitige Buchung fehlgeschlagen ist (jl_error). 0 = keine.
+     */
+    public function errorId()
+    {
+        return (int) input('jl_error', 0);
+    }
+
     protected function propBool($name)
     {
         $v = $this->property($name);
