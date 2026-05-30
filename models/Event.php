@@ -284,21 +284,28 @@ class Event extends Model
      * Erlaubte Personen-Spanne über alle Preisstufen (für Validierung/Spinner).
      */
     /**
-     * Gibt es überhaupt einen anzeigbaren Preis? True, wenn ein Preistext
-     * gesetzt ist oder irgendeine Preisstufe einen Preis > 0 (Personenpreis
-     * oder Fixpreis) hat. Reine 0-€-Stufen gelten als "kein Preis".
+     * Gibt es eine numerische Preisstufe > 0 (Personenpreis oder Fixpreis)?
+     * Maßgeblich für die berechnete Summe im Buchungs-Widget – ein reiner
+     * Preistext zählt hier NICHT, da sich daraus keine Summe berechnen lässt.
      */
-    public function hasDisplayablePrice()
+    public function hasNumericPrice()
     {
-        if (trim((string) $this->pricetext) !== '') {
-            return true;
-        }
         foreach ($this->prices ?: [] as $p) {
             if ((float) ($p['fixprice'] ?? 0) > 0 || (float) ($p['price'] ?? 0) > 0) {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Gibt es überhaupt einen anzeigbaren Preis? True, wenn ein Preistext
+     * gesetzt ist oder eine numerische Preisstufe > 0 existiert. Reine
+     * 0-€-Touren ohne Preistext gelten als "kein Preis".
+     */
+    public function hasDisplayablePrice()
+    {
+        return trim((string) $this->pricetext) !== '' || $this->hasNumericPrice();
     }
 
     public function getQuantityRange()
@@ -371,9 +378,12 @@ class Event extends Model
             'prices'        => $this->prices ?: [],
             'pricetext'     => $this->pricetext,
             'showPrice'     => (bool) $this->show_price,
-            // True nur, wenn tatsächlich ein Preis > 0 (oder ein Preistext)
-            // hinterlegt ist – reine 0-€-Touren zeigen im Frontend keinen Preis.
+            // True, wenn ein Preistext ODER eine numerische Stufe > 0 existiert
+            // (steuert den Preis-Block im Frontend).
             'hasPrice'      => $this->hasDisplayablePrice(),
+            // True nur bei einer numerischen Stufe > 0 – steuert die berechnete
+            // Summe ("… EUR") im Buchungs-Widget; ein reiner Preistext zählt nicht.
+            'hasNumericPrice' => $this->hasNumericPrice(),
             'notifications' => $this->notifications ?: [],
             'images'        => $images,
             'offer'         => $this->offer,
