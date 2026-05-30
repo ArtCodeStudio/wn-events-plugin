@@ -57,6 +57,131 @@ class Event extends Model
     ];
 
     //
+    // Defensive Normalisierung der jsonable-Felder
+    //
+    // Aus Altdaten (Firestore-Import) können in eigentlich skalaren Feldern
+    // verschachtelte Arrays stecken (z. B. prices[].unit als Objekt statt
+    // String). Das Backend-Repeater-Formular rendert solche Felder als Text
+    // und stürzt dann mit "Array to string conversion" ab. Wir bereinigen den
+    // rohen JSON-Wert sowohl beim Laden (afterFetch – schützt das Rendern
+    // bestehender, kaputter Datensätze) als auch beim Speichern (beforeSave).
+    // Bewusst KEIN getXxxAttribute-Mutator: bei jsonable-Feldern bekäme der die
+    // rohe JSON-Zeichenkette, und Winter würde das vom Mutator zurückgegebene
+    // Array anschließend erneut durch json_decode() jagen (TypeError).
+    //
+
+    public function afterFetch()
+    {
+        $this->normalizeJsonableAttributes();
+    }
+
+    public function beforeSave()
+    {
+        $this->normalizeJsonableAttributes();
+    }
+
+    protected function normalizeJsonableAttributes()
+    {
+        $this->normalizeJsonableAttribute('prices', 'sanitizePrices');
+        $this->normalizeJsonableAttribute('notifications', 'sanitizeNotifications');
+    }
+
+    /**
+     * Bereinigt ein jsonable-Feld nur dann (und schreibt den rohen Wert nur dann
+     * zurück), wenn die Sanitierung tatsächlich etwas verändert hat – sonst
+     * würde ein sauberer Datensatz allein durch erneutes json_encode als "dirty"
+     * markiert.
+     */
+    protected function normalizeJsonableAttribute($key, $sanitizer)
+    {
+        $decoded   = $this->decodeRawJsonable($key);
+        $sanitized = $this->{$sanitizer}($decoded);
+        if ($sanitized !== $decoded) {
+            $this->attributes[$key] = $this->encodeJsonable($sanitized);
+        }
+    }
+
+    protected function decodeRawJsonable($key)
+    {
+        if (!array_key_exists($key, $this->attributes)) {
+            return [];
+        }
+        $raw = $this->attributes[$key];
+        if (is_array($raw)) {
+            return $raw;
+        }
+        if ($raw === null || $raw === '') {
+            return [];
+        }
+        $decoded = json_decode($raw, true);
+        return is_array($decoded) ? $decoded : [];
+    }
+
+    protected function encodeJsonable($value)
+    {
+        return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    }
+
+    protected function sanitizePrices($prices)
+    {
+        if (!is_array($prices)) {
+            return [];
+        }
+        $out = [];
+        foreach ($prices as $p) {
+            if (!is_array($p)) {
+                continue;
+            }
+            if (isset($p['unit'])) {
+                $p['unit'] = static::scalarize($p['unit'], 'unit', 'person');
+            }
+            $out[] = $p;
+        }
+        return $out;
+    }
+
+    protected function sanitizeNotifications($items)
+    {
+        if (!is_array($items)) {
+            return [];
+        }
+        $out = [];
+        foreach ($items as $n) {
+            if (!is_array($n)) {
+                continue;
+            }
+            if (isset($n['name'])) {
+                $n['name'] = static::scalarize($n['name'], 'name');
+            }
+            if (isset($n['email'])) {
+                $n['email'] = static::scalarize($n['email'], 'email');
+            }
+            $out[] = $n;
+        }
+        return $out;
+    }
+
+    /**
+     * Reduziert einen evtl. verschachtelten Wert auf einen Skalar: bevorzugt den
+     * passenden Schlüssel, sonst den ersten skalaren Wert, sonst den Default.
+     */
+    protected static function scalarize($value, $preferKey = null, $default = null)
+    {
+        if (is_array($value)) {
+            if ($preferKey !== null && isset($value[$preferKey]) && is_scalar($value[$preferKey])) {
+                return $value[$preferKey];
+            }
+            foreach ($value as $v) {
+                if (is_scalar($v)) {
+                    return $v;
+                }
+            }
+            return $default;
+        }
+        return $value ?? $default;
+    }
+
+    //
     // Scopes
     //
 

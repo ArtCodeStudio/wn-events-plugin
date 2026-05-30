@@ -255,7 +255,11 @@ class ImportFirestore extends Command
                 'max'                => (int) ($p['max'] ?? 1),
                 'price'              => (float) ($p['price'] ?? 0),
                 'fixprice'           => (float) ($p['fixprice'] ?? 0),
-                'unit'               => $p['unit'] ?? 'person',
+                // Altdaten enthalten 'unit' vereinzelt als verschachteltes Objekt
+                // statt String – auf einen Skalar reduzieren (siehe Event-Model).
+                'unit'               => is_array($p['unit'] ?? null)
+                    ? ($p['unit']['unit'] ?? 'person')
+                    : ($p['unit'] ?? 'person'),
                 'eachAdditionalUnit' => (bool) ($p['eachAdditionalUnit'] ?? false),
             ];
         }
