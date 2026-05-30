@@ -2,14 +2,14 @@
 
 return [
     'plugin' => [
-        'name'        => 'Führungen',
-        'description' => 'Verwaltung von Führungen, Kalendern, Staffelpreisen, Bildergalerien und Buchungen.',
-        'menu_label'  => 'Führungen',
+        'name'        => 'Veranstaltungen',
+        'description' => 'Verwaltung von Veranstaltungen, Kalendern, Staffelpreisen, Bildergalerien und Buchungen.',
+        'menu_label'  => 'Veranstaltungen',
     ],
     'events' => [
         'menu_label' => 'Veranstaltungen',
-        'label'      => 'Führung',
-        'label_plural' => 'Führungen',
+        'label'      => 'Veranstaltung',
+        'label_plural' => 'Veranstaltungen',
     ],
     'calendars' => [
         'menu_label' => 'Kalender',
@@ -21,11 +21,11 @@ return [
         'counter_label' => 'Neue Buchungsanfragen',
     ],
     'permissions' => [
-        'manage_events'   => 'Führungen & Kalender verwalten',
+        'manage_events'   => 'Veranstaltungen & Kalender verwalten',
         'manage_bookings' => 'Buchungen verwalten',
     ],
     'settings' => [
-        'label'       => 'Führungen-Einstellungen',
+        'label'       => 'Veranstaltungen-Einstellungen',
         'description' => 'Benachrichtigungs-E-Mail, Absender und Buchungsoptionen.',
     ],
 ];

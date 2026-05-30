@@ -19,4 +19,9 @@ Route::group([
     Route::match(['post', 'options'], 'book', [\JumpLink\Events\Classes\Api::class, 'book'])
         ->middleware('throttle:20,1'); // max. 20 Buchungsanfragen pro Minute/IP
 
+    // Serverseitiger Buchungsweg (klassischer Form-POST + Redirect) – funktioniert
+    // ohne JS und unabhängig vom Komponenten-AJAX. Gleiche Logik via BookingService.
+    Route::post('book-form', [\JumpLink\Events\Classes\Api::class, 'bookForm'])
+        ->middleware('throttle:20,1');
+
 });

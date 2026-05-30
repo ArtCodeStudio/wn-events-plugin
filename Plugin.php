@@ -25,9 +25,13 @@ class Plugin extends PluginBase
 
     public function registerComponents()
     {
-        // Das Frontend nutzt die JSON-API aus routes.php (rivets/XHR-getrieben),
-        // daher werden derzeit keine CMS-Komponenten benötigt.
-        return [];
+        // Serverseitige Darstellung (SEO) – ergänzt die clientseitige JSON-API
+        // aus routes.php. Das Plugin unterstützt damit beide Render-Modi; die
+        // Buchung läuft über den gemeinsamen BookingService (Api::book für JSON,
+        // EventList::onBook für serverseitiges Winter-AJAX).
+        return [
+            \JumpLink\Events\Components\EventList::class => 'eventList',
+        ];
     }
 
     public function registerNavigation()

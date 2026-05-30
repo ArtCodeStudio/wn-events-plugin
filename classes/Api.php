@@ -268,6 +268,26 @@ class Api
     }
 
     /**
+     * Serverseitige Buchung über klassischen Form-POST (ohne JS). Nutzt denselben
+     * BookingService wie book()/onBook und leitet zurück auf die Ausgangsseite mit
+     * einem Erfolgs-/Fehler-Flag pro Event (jl_booked / jl_error im Query-String).
+     */
+    public function bookForm(\Illuminate\Http\Request $request)
+    {
+        $result  = \JumpLink\Events\Classes\BookingService::create($request->all());
+        $eventId = (int) $request->input('event_id');
+
+        $back = $request->input('redirect') ?: ($request->headers->get('referer') ?: '/');
+        // Vorhandene jl_*-Flags entfernen, damit sie sich nicht aufstauen.
+        $back = preg_replace('/[?&]jl_(booked|error)=[^&]*/', '', $back);
+        $back = rtrim(preg_replace('/#.*/', '', $back));
+        $sep  = str_contains($back, '?') ? '&' : '?';
+        $flag = $result['success'] ? 'jl_booked=' : 'jl_error=';
+
+        return redirect()->to($back . $sep . $flag . $eventId . '#jl-event-' . $eventId);
+    }
+
+    /**
      * JSON-Antwort mit CORS für die eigene Domain (Frontend nutzt fetch/XHR).
      */
     protected function json(\Illuminate\Http\Request $request, $data, $status = 200)

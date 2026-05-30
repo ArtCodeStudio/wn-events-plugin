@@ -1,0 +1,178 @@
+{#
+    Serverseitige Veranstaltungs-Liste (SEO: Inhalt steht im HTML-Quelltext).
+    Buchung läuft über den AJAX-Handler onBook (Winter-Framework), der den
+    gemeinsamen BookingService nutzt.
+#}
+<div class="jl-events container py-4">
+
+    {% set events = __SELF__.events() %}
+
+    {% if events is empty %}
+        {# Freundlicher Leerzustand #}
+        <div class="jl-events-empty text-center py-5">
+            {% if __SELF__.startTime() == 'past' %}
+                <p class="lead mb-0">Es gibt noch keine vergangenen Veranstaltungen.</p>
+            {% else %}
+                <p class="lead mb-1">Zurzeit sind keine Veranstaltungen geplant.</p>
+                <p class="mb-0">Schauen Sie gern bald wieder vorbei – wir freuen uns auf Sie!</p>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="jl-events-list">
+            {% for event in events %}
+                <article class="jl-event mb-5" id="jl-event-{{ event.id }}">
+                    <div class="row">
+
+                        {% if __SELF__.showImages() and event.images.count %}
+                            <div class="col-12 col-md-5 mb-3 mb-md-0">
+                                <img
+                                    class="jl-event-image img-fluid rounded w-100"
+                                    src="{{ event.images.first.getThumb(800, 600, {'mode': 'crop'}) }}"
+                                    alt="{{ event.title }}"
+                                    loading="lazy"
+                                >
+                            </div>
+                            <div class="col-12 col-md-7">
+                        {% else %}
+                            <div class="col-12">
+                        {% endif %}
+
+                            <h2 class="jl-event-title mb-1">{{ event.title }}</h2>
+
+                            {% if event.subtitle %}
+                                <p class="jl-event-subtitle text-muted mb-2">{{ event.subtitle }}</p>
+                            {% endif %}
+
+                            {% if event.type == 'fix' and event.starts_at %}
+                                <p class="jl-event-date mb-2">
+                                    <strong>
+                                        {{ event.starts_at|date('d.m.Y') }}{% if event.show_times %}, {{ event.starts_at|date('H:i') }} Uhr{% endif %}
+                                    </strong>
+                                </p>
+                            {% elseif event.type == 'variable' %}
+                                <p class="jl-event-date mb-2"><strong>Termin auf Anfrage</strong></p>
+                            {% endif %}
+
+                            {% if event.location %}
+                                <p class="jl-event-location mb-2">
+                                    <a href="https://www.google.com/maps/search/?api=1&query={{ event.location|url_encode }}" target="_blank" rel="noopener">
+                                        {{ event.location }}
+                                    </a>
+                                </p>
+                            {% endif %}
+
+                            {% if event.description %}
+                                <div class="jl-event-description mb-3">{{ event.description|raw }}</div>
+                            {% endif %}
+
+                            {% if event.show_price %}
+                                {% if event.pricetext %}
+                                    <p class="jl-event-price mb-3">{{ event.pricetext }}</p>
+                                {% elseif event.prices is not empty %}
+                                    <p class="jl-event-price mb-3">
+                                        {% set p = event.prices|first %}
+                                        {% if p.fixprice and p.fixprice > 0 %}{{ p.fixprice }} €{% if p.price and p.price > 0 %} zzgl. {{ p.price }} € pro Person{% endif %}
+                                        {% elseif p.price and p.price > 0 %}{{ p.price }} € pro Person{% endif %}
+                                    </p>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if __SELF__.showBookButton() %}
+                                <button
+                                    class="btn btn-primary"
+                                    type="button"
+                                    data-toggle="collapse"
+                                    data-target="#jl-book-form-{{ event.id }}"
+                                    aria-expanded="false"
+                                    aria-controls="jl-book-form-{{ event.id }}"
+                                >
+                                    {% if event.type == 'variable' %}Anfragen{% else %}Buchen{% endif %}
+                                </button>
+
+                                {% set justBooked = this.param.jl_booked == event.id or (this.request.get('jl_booked') == event.id) %}
+                                {% set justError  = this.param.jl_error  == event.id or (this.request.get('jl_error')  == event.id) %}
+
+                                <div class="collapse mt-3 {{ (justBooked or justError) ? 'show' : '' }}" id="jl-book-form-{{ event.id }}">
+                                    {# Serverseitiges Erfolgs-/Fehler-Feedback (klassischer POST, ohne JS) #}
+                                    <div id="jl-book-result-{{ event.id }}" class="mb-3">
+                                        {% if justBooked %}
+                                            <div class="alert alert-success mb-0" role="alert">
+                                                Vielen Dank! Ihre Anfrage wurde abgeschickt – wir melden uns in Kürze bei Ihnen.
+                                            </div>
+                                        {% elseif justError %}
+                                            <div class="alert alert-danger mb-0" role="alert">
+                                                Ihre Anfrage konnte nicht verarbeitet werden. Bitte prüfen Sie Ihre Eingaben (gültige E-Mail, Telefon mind. 4 Zeichen) und versuchen Sie es erneut.
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    {#
+                                        Buchung läuft serverseitig über die Plugin-Route /api/jumplink/events/book-form
+                                        (klassischer POST + Redirect, funktioniert ohne JS). Clientseitig steht
+                                        parallel die JSON-API /api/jumplink/events/book bereit (dynamisch, z. B. rivets).
+                                    #}
+                                    <form
+                                        class="jl-book-form"
+                                        method="post"
+                                        action="{{ 'api/jumplink/events/book-form' | app }}"
+                                    >
+                                        <input type="hidden" name="event_id" value="{{ event.id }}">
+                                        <input type="hidden" name="redirect" value="{{ this.page.url }}">
+                                        {# Honeypot – muss leer bleiben #}
+                                        <input type="text" name="website" value="" tabindex="-1" autocomplete="off" class="d-none" aria-hidden="true">
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="jl-fn-{{ event.id }}">Vorname *</label>
+                                                <input class="form-control" id="jl-fn-{{ event.id }}" name="firstname" required>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="jl-ln-{{ event.id }}">Nachname</label>
+                                                <input class="form-control" id="jl-ln-{{ event.id }}" name="lastname">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="jl-em-{{ event.id }}">E-Mail *</label>
+                                                <input type="email" class="form-control" id="jl-em-{{ event.id }}" name="email" required>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="jl-ph-{{ event.id }}">Telefon</label>
+                                                <input class="form-control" id="jl-ph-{{ event.id }}" name="phone">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="jl-qt-{{ event.id }}">Personen *</label>
+                                                <input type="number" min="1" value="1" class="form-control" id="jl-qt-{{ event.id }}" name="quantity" required>
+                                            </div>
+                                            {% if event.type == 'variable' %}
+                                                <div class="form-group col-md-8">
+                                                    <label for="jl-dt-{{ event.id }}">Wunschdatum</label>
+                                                    <input type="text" placeholder="TT.MM.JJJJ" class="form-control" id="jl-dt-{{ event.id }}" name="date">
+                                                </div>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="jl-msg-{{ event.id }}">Nachricht</label>
+                                            <textarea class="form-control" id="jl-msg-{{ event.id }}" name="message" rows="3"></textarea>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary">
+                                            Anfrage absenden
+                                        </button>
+                                    </form>
+                                </div>
+                            {% endif %}
+
+                        </div>{# /col #}
+                    </div>{# /row #}
+                </article>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</div>
