@@ -65,10 +65,13 @@
                                 <div class="jl-event-description mb-3">{{ event.description|raw }}</div>
                             {% endif %}
 
-                            {% if event.show_price %}
+                            {# Preis nur, wenn der Schalter aktiv ist UND ein Preis > 0
+                               (oder ein Preistext) hinterlegt ist – reine 0-€-Touren
+                               zeigen keinen Preis. #}
+                            {% if event.show_price and event.hasDisplayablePrice %}
                                 {% if event.pricetext %}
                                     <p class="jl-event-price mb-3">{{ event.pricetext }}</p>
-                                {% elseif event.prices is not empty %}
+                                {% else %}
                                     <p class="jl-event-price mb-3">
                                         {% set p = event.prices|first %}
                                         {% if p.fixprice and p.fixprice > 0 %}{{ p.fixprice }} €{% if p.price and p.price > 0 %} zzgl. {{ p.price }} € pro Person{% endif %}

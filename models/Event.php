@@ -283,6 +283,24 @@ class Event extends Model
     /**
      * Erlaubte Personen-Spanne über alle Preisstufen (für Validierung/Spinner).
      */
+    /**
+     * Gibt es überhaupt einen anzeigbaren Preis? True, wenn ein Preistext
+     * gesetzt ist oder irgendeine Preisstufe einen Preis > 0 (Personenpreis
+     * oder Fixpreis) hat. Reine 0-€-Stufen gelten als "kein Preis".
+     */
+    public function hasDisplayablePrice()
+    {
+        if (trim((string) $this->pricetext) !== '') {
+            return true;
+        }
+        foreach ($this->prices ?: [] as $p) {
+            if ((float) ($p['fixprice'] ?? 0) > 0 || (float) ($p['price'] ?? 0) > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function getQuantityRange()
     {
         $prices = $this->prices ?: [];
@@ -353,6 +371,9 @@ class Event extends Model
             'prices'        => $this->prices ?: [],
             'pricetext'     => $this->pricetext,
             'showPrice'     => (bool) $this->show_price,
+            // True nur, wenn tatsächlich ein Preis > 0 (oder ein Preistext)
+            // hinterlegt ist – reine 0-€-Touren zeigen im Frontend keinen Preis.
+            'hasPrice'      => $this->hasDisplayablePrice(),
             'notifications' => $this->notifications ?: [],
             'images'        => $images,
             'offer'         => $this->offer,
