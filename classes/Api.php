@@ -169,7 +169,18 @@ class Api
         $booking->zip         = $input['zip'] ?? null;
         $booking->message     = $input['message'] ?? null;
         $booking->status      = 'new';
-        $booking->save();
+
+        // Das Booking-Model validiert serverseitig zusaetzlich (z. B. phone min:4,
+        // lastname min:2). Schlaegt das fehl, als 422 mit Feldfehlern antworten
+        // statt eine ungefangene ModelException (HTTP 500) zu werfen.
+        try {
+            $booking->save();
+        } catch (\Winter\Storm\Database\ModelException $e) {
+            return $this->json($request, [
+                'success' => false,
+                'errors'  => $booking->errors()->toArray(),
+            ], 422);
+        }
 
         $this->sendMails($booking, $event);
 
