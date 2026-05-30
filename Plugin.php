@@ -31,6 +31,8 @@ class Plugin extends PluginBase
         // EventList::onBook für serverseitiges Winter-AJAX).
         return [
             \JumpLink\Events\Components\EventList::class => 'eventList',
+            // Optionaler Frontend-Inline-Editor (nur aktiv mit Samuell.ContentEditor).
+            \JumpLink\Events\Components\EventInlineEditor::class => 'eventInlineEditor',
         ];
     }
 
