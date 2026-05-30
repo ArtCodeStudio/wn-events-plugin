@@ -33,6 +33,7 @@ tabs:
             nameFrom: name
             emptyOption: '– kein Kalender –'
             span: left
+            comment: 'Ordnet die Veranstaltung einer Kategorie/Region zu.'
         type:
             label: Typ
             tab: Details
